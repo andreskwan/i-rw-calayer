@@ -36,6 +36,12 @@ class BookViewController : UIViewController {
   
   override func viewWillAppear(animated: Bool) {
     
+    //it takes a CGColor no a UIColor
+    doneButton.layer.cornerRadius = CGRectGetHeight(doneButton.bounds)/2
+    
+    bookImageView.layer.borderColor = UIColor.blackColor().CGColor
+    bookImageView.layer.borderWidth = 100
+    
     guard let book = book else {
       return
     }
