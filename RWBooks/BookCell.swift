@@ -24,6 +24,12 @@ import UIKit
 
 class BookCell : UICollectionViewCell {
   
-  @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var imageView: UIImageView! {
+        didSet {
+            imageView.layer.shadowRadius = 4.0
+            imageView.layer.shadowOpacity = 0.5
+            imageView.layer.shadowOffset = CGSize.zero
+        }
+    }
   
 }
