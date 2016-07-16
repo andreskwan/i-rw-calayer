@@ -40,7 +40,7 @@ class BookViewController : UIViewController {
     doneButton.layer.cornerRadius = CGRectGetHeight(doneButton.bounds)/2
     
     bookImageView.layer.borderColor = UIColor.blackColor().CGColor
-    bookImageView.layer.borderWidth = 100
+    bookImageView.layer.borderWidth = 1.0
     
     guard let book = book else {
       return
