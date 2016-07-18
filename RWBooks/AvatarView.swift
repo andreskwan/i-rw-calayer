@@ -28,7 +28,7 @@ class AvatarView: UIView {
   let margin: CGFloat = 30.0
   let labelName = UILabel()
   let imageView = UIImageView()
-  
+  let strokeColor = UIColor.blackColor().CGColor
   
   @IBInspectable var imageAvatar: UIImage? {
     didSet {
@@ -57,6 +57,11 @@ class AvatarView: UIView {
     // Setup image view
     imageView.contentMode = .ScaleAspectFit
     imageView.translatesAutoresizingMaskIntoConstraints = false
+    
+    imageView.layer.borderColor = strokeColor
+    imageView.layer.borderWidth = 5.0
+    imageView.layer.masksToBounds = true
+
     addSubview(imageView)
     
     // Setup label
@@ -89,6 +94,7 @@ class AvatarView: UIView {
   
   override func layoutSubviews() {
     super.layoutSubviews()
-  }
+    imageView.layer.cornerRadius = CGRectGetHeight(imageView.bounds)/2
+    }
   
 }
