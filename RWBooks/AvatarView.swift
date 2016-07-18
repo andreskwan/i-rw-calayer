@@ -22,6 +22,9 @@
 
 import UIKit
 
+//the storyBoard doesn't call it from awakeFromNib, it should render the view directly in 
+//the canvas, this allows seeing how your custom views will appear without buildin and 
+//running your app after each change.
 @IBDesignable
 class AvatarView: UIView {
     
@@ -42,11 +45,14 @@ class AvatarView: UIView {
         }
     }
     
+    //when the view if first loaded from the storyBoard
     override func awakeFromNib() {
         super.awakeFromNib()
         setup()
     }
     
+    //IBDesignable - load the view from this method 
+    //this method is used when you are previewing the UIViewController in the storyBoard
     override func prepareForInterfaceBuilder() {
         super.prepareForInterfaceBuilder()
         setup()
