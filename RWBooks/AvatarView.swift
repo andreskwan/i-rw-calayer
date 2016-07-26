@@ -31,26 +31,33 @@ class AvatarView: UIView {
     let margin: CGFloat = 30.0
     let labelName = UILabel()
     let imageView = UIImageView()
-    let strokeColor = UIColor.blackColor().CGColor
     
+    let strokeColor = UIColor.blackColor().CGColor
+
+    let layerGradient = CAGradientLayer()
+
+    //TODO: turn these properties to inspectable to set these from the story board
+    let startColor = UIColor.whiteColor()
+    let endColor = UIColor.blackColor()
+
     @IBInspectable var imageAvatar: UIImage? {
         didSet {
             configure()
         }
     }
-    
+
     @IBInspectable var avatarName: String = "" {
         didSet {
             configure()
         }
     }
-    
+
     //when the view if first loaded from the storyBoard
     override func awakeFromNib() {
         super.awakeFromNib()
         setup()
     }
-    
+
     //IBDesignable - load the view from this method 
     //this method is used when you are previewing the UIViewController in the storyBoard
     override func prepareForInterfaceBuilder() {
@@ -60,13 +67,17 @@ class AvatarView: UIView {
     
     func setup() {
         
-        // Setup image view
-        imageView.contentMode = .ScaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        // Setup gradient
+        layer.addSublayer(layerGradient)
         
+        // Stroke Avatar
         imageView.layer.borderColor = strokeColor
         imageView.layer.borderWidth = 5.0
         imageView.layer.masksToBounds = true
+        
+        // Setup image view
+        imageView.contentMode = .ScaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(imageView)
         
@@ -91,16 +102,30 @@ class AvatarView: UIView {
         NSLayoutConstraint.activateConstraints([imageViewCenterX, imageViewTop, imageViewBottom, imageViewWidth])
     }
     
+    //setings that may change
     func configure() {
         
         // Configure image view and label
         imageView.image = imageAvatar
         labelName.text = avatarName
+        
+        // Configure gradient
+        layerGradient.colors = [startColor.CGColor, endColor.CGColor]
+        // Seting a vertical gradient
+        layerGradient.startPoint = CGPoint(x: 0.5, y: 0)
+        layerGradient.endPoint = CGPoint(x:0.5, y: 1)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         imageView.layer.cornerRadius = CGRectGetHeight(imageView.bounds)/2
+        
+        // Gradient 
+        layerGradient.frame = CGRect(x: 0,
+                                     y: 0,
+                                     width: CGRectGetWidth(self.bounds),
+                                     height: CGRectGetHeight(self.bounds)/2)
+        
     }
     
 }
