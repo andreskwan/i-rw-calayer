@@ -130,7 +130,7 @@ class AvatarView: UIView {
         
         // Configure image view and label
         imageView.image = imageAvatar
-        imageView.backgroundColor = avatarBackgroundColor
+        imageView.backgroundColor = avatarBackgroundColor 
         labelName.text = avatarName
         
         // Configure gradient
