@@ -32,13 +32,34 @@ class AvatarView: UIView {
     let labelName = UILabel()
     let imageView = UIImageView()
     
-    let strokeColor = UIColor.blackColor().CGColor
+    @IBInspectable var strokeColor: UIColor = UIColor.blackColor() {
+        didSet {
+            configure()
+        }
+    }
 
     let layerGradient = CAGradientLayer()
+    
+    let layerBackground = CALayer()
 
     //TODO: turn these properties to inspectable to set these from the story board
-    let startColor = UIColor.whiteColor()
-    let endColor = UIColor.blackColor()
+    @IBInspectable var startColor: UIColor = UIColor.whiteColor() {
+        didSet {
+            configure()
+        }
+    }
+    
+    @IBInspectable var endColor: UIColor = UIColor.blackColor() {
+        didSet {
+            configure()
+        }
+    }
+    
+    @IBInspectable var avatarBackgroundColor: UIColor = UIColor.blackColor() {
+        didSet {
+            configure()
+        }
+    }
 
     @IBInspectable var imageAvatar: UIImage? {
         didSet {
@@ -51,6 +72,7 @@ class AvatarView: UIView {
             configure()
         }
     }
+    
 
     //when the view if first loaded from the storyBoard
     override func awakeFromNib() {
@@ -69,9 +91,10 @@ class AvatarView: UIView {
         
         // Setup gradient
         layer.addSublayer(layerGradient)
+        layer.addSublayer(layerBackground)
         
         // Stroke Avatar
-        imageView.layer.borderColor = strokeColor
+        imageView.layer.borderColor = strokeColor.CGColor
         imageView.layer.borderWidth = 5.0
         imageView.layer.masksToBounds = true
         
@@ -107,6 +130,7 @@ class AvatarView: UIView {
         
         // Configure image view and label
         imageView.image = imageAvatar
+        imageView.backgroundColor = avatarBackgroundColor
         labelName.text = avatarName
         
         // Configure gradient
@@ -114,6 +138,8 @@ class AvatarView: UIView {
         // Seting a vertical gradient
         layerGradient.startPoint = CGPoint(x: 0.5, y: 0)
         layerGradient.endPoint = CGPoint(x:0.5, y: 1)
+        
+        layerBackground.backgroundColor = avatarBackgroundColor.CGColor
     }
     
     override func layoutSubviews() {
@@ -125,7 +151,10 @@ class AvatarView: UIView {
                                      y: 0,
                                      width: CGRectGetWidth(self.bounds),
                                      height: CGRectGetHeight(self.bounds)/2)
-        
+        layerBackground.frame = CGRect(x: 0,
+                                     y: CGRectGetHeight(self.bounds)/2,
+                                     width: CGRectGetWidth(self.bounds),
+                                     height: CGRectGetHeight(self.bounds)/2)
     }
     
 }
