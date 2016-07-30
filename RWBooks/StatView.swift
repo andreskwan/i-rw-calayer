@@ -41,12 +41,18 @@ class StatView: UIView {
      */
     let bgLayer = CAShapeLayer()
     
-    @IBInspectable var bgColor: UIColor = UIColor.whiteColor() {
+    @IBInspectable var bgColor: UIColor = UIColor.grayColor() {
         didSet {
             configure()
         }
     }
+    let fgLayer = CAShapeLayer()
     
+    @IBInspectable var fgColor: UIColor = UIColor.grayColor() {
+        didSet {
+            configure()
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -70,6 +76,11 @@ class StatView: UIView {
         bgLayer.strokeEnd = 1
         layer.addSublayer(bgLayer)
         
+        // Setup foreground layer
+        fgLayer.lineWidth = 20.0
+        fgLayer.fillColor = nil
+        fgLayer.strokeEnd = 0.5
+        layer.addSublayer(fgLayer)
         
         // Setup percent label
         percentLabel.font = UIFont.systemFontOfSize(26)
@@ -101,6 +112,7 @@ class StatView: UIView {
     func configure() {
         percentLabel.text = String(format: "%.0f/%.0f", curValue, range)
         bgLayer.strokeColor = bgColor.CGColor
+        fgLayer.strokeColor = fgColor.CGColor
     }
     
     /*
@@ -109,6 +121,7 @@ class StatView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         setupShapeLayer(bgLayer)
+        setupShapeLayer(fgLayer)
     }
 }
 
