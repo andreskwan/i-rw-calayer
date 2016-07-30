@@ -31,7 +31,7 @@ class StatView: UIView {
     var range: CGFloat = 10
     var curValue: CGFloat = 0 {
         didSet {
-            configure()
+            animate()
         }
     }
     let margin: CGFloat = 10
@@ -79,7 +79,7 @@ class StatView: UIView {
         // Setup foreground layer
         fgLayer.lineWidth = 20.0
         fgLayer.fillColor = nil
-        fgLayer.strokeEnd = 0.5
+        fgLayer.strokeEnd = 0
         layer.addSublayer(fgLayer)
         
         // Setup percent label
@@ -135,4 +135,23 @@ private extension StatView {
         let path = UIBezierPath(arcCenter: center, radius: radius, startAngle: startAngle, endAngle: finishAngle, clockwise: true)
         shapeLayer.path = path.CGPath
     }
+    
+    func animate() {
+        var fromValue = fgLayer.strokeEnd
+        let toValue = curValue / range
+        let percentChange = abs(fromValue - toValue)
+        
+        // 1 create an animation on a layer property, pasing the name of the property I wish animate
+        let animation = CABasicAnimation(keyPath: "strokeEnd")
+        animation.fromValue = fromValue //start
+        animation.toValue = toValue     //end
+        // 2 duration based on the amount changed/ the longer the bar has to move, the longer it takes (constant rate)
+        animation.duration = CFTimeInterval(percentChange * 4)
+        // 3 avoid to run to animations at the same time
+        fgLayer.removeAnimationForKey("stroke")
+        fgLayer.addAnimation(animation, forKey: "stroke")
+    
+    }
+    
+    
 }
