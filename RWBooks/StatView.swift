@@ -110,7 +110,6 @@ class StatView: UIView {
      what might change when inspectables change
      */
     func configure() {
-        percentLabel.text = String(format: "%.0f/%.0f", curValue, range)
         bgLayer.strokeColor = bgColor.CGColor
         fgLayer.strokeColor = fgColor.CGColor
     }
@@ -137,8 +136,13 @@ private extension StatView {
     }
     
     func animate() {
+        percentLabel.text = String(format: "%.0f/%.0f", curValue, range)
         var fromValue = fgLayer.strokeEnd
         let toValue = curValue / range
+        //This checks to see if the presentation layer is active, and if so gets the stroke end from that as the starting point
+        if let presentationLayer = fgLayer.presentationLayer() as? CAShapeLayer {
+            fromValue = presentationLayer.strokeEnd
+        }
         let percentChange = abs(fromValue - toValue)
         
         // 1 create an animation on a layer property, pasing the name of the property I wish animate
@@ -150,7 +154,10 @@ private extension StatView {
         // 3 avoid to run to animations at the same time
         fgLayer.removeAnimationForKey("stroke")
         fgLayer.addAnimation(animation, forKey: "stroke")
-    
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        fgLayer.strokeEnd = toValue
+        CATransaction.commit()
     }
     
     
