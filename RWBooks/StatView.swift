@@ -135,25 +135,41 @@ private extension StatView {
         shapeLayer.path = path.CGPath
     }
     
+    // animate from the current strokeEnd to the desired strokeEnd
     func animate() {
+        //update label
         percentLabel.text = String(format: "%.0f/%.0f", curValue, range)
-        var fromValue = fgLayer.strokeEnd
-        let toValue = curValue / range
-        //This checks to see if the presentation layer is active, and if so gets the stroke end from that as the starting point
+        
+        var fromValue = fgLayer.strokeEnd // current strokeEnd value
+        let toValue = curValue / range    // new strokeEnd value
+        
+        //This checks to see if the presentation layer is active,
         if let presentationLayer = fgLayer.presentationLayer() as? CAShapeLayer {
+            // if so, gets the strokeEnnd value from that as the starting point
             fromValue = presentationLayer.strokeEnd
         }
-        let percentChange = abs(fromValue - toValue)
+        let percentChange = abs(fromValue - toValue) // to set the speed of the animation
         
         // 1 create an animation on a layer property, pasing the name of the property I wish animate
         let animation = CABasicAnimation(keyPath: "strokeEnd")
         animation.fromValue = fromValue //start
         animation.toValue = toValue     //end
-        // 2 duration based on the amount changed/ the longer the bar has to move, the longer it takes (constant rate)
+        
+        // 2 duration based on the amount 
+        // the longer the bar has to move, the longer it takes (constant rate)
         animation.duration = CFTimeInterval(percentChange * 4)
-        // 3 avoid to run to animations at the same time
-        fgLayer.removeAnimationForKey("stroke")
-        fgLayer.addAnimation(animation, forKey: "stroke")
+        
+        // 3 remove animation from the render three with the same name 
+        // avoid to run to animations at the same time
+        fgLayer.removeAnimationForKey("loro")
+        
+        // 4 add the animation to the render tree
+        fgLayer.addAnimation(animation, forKey: nil)
+        
+        // 5 disable implicit transactions in the render tree
+        // because changing a layer property triggers an implicit tranaction/animation (an automatic animation)
+        // - add a explicit transition
+        // - disable this implicit animation
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         fgLayer.strokeEnd = toValue
